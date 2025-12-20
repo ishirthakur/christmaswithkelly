@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Security Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 24px;
+      max-width: 680px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    label {
+      display: block;
+      margin-top: 14px;
+      font-weight: 600;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 18px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+    }
+    .msg {
+      margin-top: 14px;
+    }
+    .hidden {
+      display: none;
+    }
+    img {
+      margin-top: 18px;
+      max-width: 100%;
+      border-radius: 12px;
+    }
+    .hint {
+      color: #666;
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Answer the security questions</h1>
+
+  <div class="card">
+    <form id="qaForm" autocomplete="off">
+      <label for="q1">1) What city were you born in?</label>
+      <input id="q1" name="q1" type="text" placeholder="Type your answer" required />
+
+      <label for="q2">2) What was the name of your first pet?</label>
+      <input id="q2" name="q2" type="text" placeholder="Type your answer" required />
+
+      <label for="q3">3) What is your favourite colour?</label>
+      <input id="q3" name="q3" type="text" placeholder="Type your answer" required />
+
+      <div class="hint">Tip: Answers are checked case‑insensitively and extra spaces are ignored.</div>
+
+      <button type="submit">Submit</button>
+      <div id="msg" class="msg" aria-live="polite"></div>
+    </form>
+
+    <div id="result" class="hidden">
+      <h2>Access granted ✅</h2>
+      <p>Here’s the photo:</p>
+      <img id="secretImg" src="photo.jpg" alt="Revealed photo" />
+    </div>
+  </div>
+
+  <script>
+    // Predefined correct answers. Change these values to your own answers.
+    const CORRECT = {
+      q1: "sydney",
+      q2: "buddy",
+      q3: "blue",
+    };
+
+    // Normalise input by trimming and converting to lower case
+    function normalize(s) {
+      return (s || "").trim().toLowerCase();
+    }
+
+    const form = document.getElementById("qaForm");
+    const msg = document.getElementById("msg");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Retrieve user answers
+      const a1 = normalize(document.getElementById("q1").value);
+      const a2 = normalize(document.getElementById("q2").value);
+      const a3 = normalize(document.getElementById("q3").value);
+
+      // Check if all answers match
+      const ok =
+        a1 === normalize(CORRECT.q1) &&
+        a2 === normalize(CORRECT.q2) &&
+        a3 === normalize(CORRECT.q3);
+
+      if (ok) {
+        msg.textContent = "";
+        form.classList.add("hidden");
+        result.classList.remove("hidden");
+      } else {
+        msg.textContent = "Incorrect answers. Please try again.";
+        msg.style.color = "crimson";
+      }
+    });
+  </script>
+</body>
+</html>
